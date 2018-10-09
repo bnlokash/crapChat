@@ -8,7 +8,7 @@ var socket = require('socket.io');
 var io = socket(httpServer);
 
 var portNumber = 4200;
-var userCount = 0;
+let userCount = 0;
 
 app.get('/', (request, response)=> {
     response.sendFile(__dirname + '/index.html');
@@ -17,6 +17,11 @@ app.get('/', (request, response)=> {
 io.on('connection', (socket)=>{
     userCount++;
     console.log(userCount + ' users connected');
+
+    socket.on('chatMessage', (message)=>{
+        console.log('New Message: ' + message);
+    })
+
     socket.on('disconnect', ()=> {
         userCount--;
         console.log('user disconnected - ' + userCount + ' users remain');
