@@ -4,10 +4,23 @@ var app = express();
 var http = require('http');
 var httpServer = http.createServer(app);
 
+var socket = require('socket.io');
+var io = socket(httpServer);
+
 var portNumber = 4200;
+var userCount = 0;
 
 app.get('/', (request, response)=> {
-    response.send('<h1>Hello World!</h1>');
+    response.sendFile(__dirname + '/index.html');
+})
+
+io.on('connection', (socket)=>{
+    userCount++;
+    console.log(userCount + ' users connected');
+    socket.on('disconnect', ()=> {
+        userCount--;
+        console.log('user disconnected - ' + userCount + ' users remain');
+    });
 })
 
 httpServer.listen(portNumber, ()=> {
