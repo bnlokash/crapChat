@@ -7,7 +7,7 @@ var httpServer = http.createServer(app);
 var socket = require('socket.io');
 var io = socket(httpServer);
 
-var portNumber = 4200;
+var portNumber = process.env.PORT || 4200;
 var userCount = 0;
 var userConnectCount = 0;
 var users = [];
