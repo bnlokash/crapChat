@@ -35,12 +35,13 @@ io.on('connection', (socket)=>{
     socket.emit('initUser', userName, userID, users);
 
     // emit new user to all current users
-    socket.broadcast.emit('newUser', userName);
+    socket.broadcast.emit('newUser', socket.id, userName);
 
-    // wire-ups
+    /** callbacks **/
+
     // on chatMessage, re-emit
-    socket.on('chatMessage', (messageText)=>{
-        io.emit('chatMessage', messageText);
+    socket.on('chatMessage', (name, messageText)=>{
+        io.emit('chatMessage', name,  messageText);
     });
 
     // on disconnect
@@ -52,8 +53,17 @@ io.on('connection', (socket)=>{
         })
         console.log( userName + ' disconnected - ' + userCount + ' users remain');
         // broadcast removeUser containing userName for clients to remove from current users div
-        socket.broadcast.emit('removeUser', userName)
+        socket.broadcast.emit('removeUser', socket.id, userName);
     });
+
+    socket.on('changeName', (fromSID, toName)=>{
+        for (var i = 0; i < users.length; i++){
+            if (users[i].id == fromSID){
+                users[i].name = toName;
+            }
+        }
+        io.emit('changeName', fromSID, toName);
+    })
 });
 
 httpServer.listen(portNumber, ()=> {
