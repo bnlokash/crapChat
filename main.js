@@ -29,8 +29,6 @@ io.on('connection', (socket)=>{
     // add new user to users array
     users.push({id: userID, name: userName});
 
-    console.log(userCount + ' users connected');
-    
     // emit new user info, current users array
     socket.emit('initUser', userName, userID, users);
 
@@ -51,7 +49,6 @@ io.on('connection', (socket)=>{
         users = users.filter((obj)=>{
             return obj.id !== socket.id;
         })
-        console.log( userName + ' disconnected - ' + userCount + ' users remain');
         // broadcast removeUser containing userName for clients to remove from current users div
         socket.broadcast.emit('removeUser', socket.id, userName);
     });

@@ -70,7 +70,6 @@ $(()=>{
         currentUsers = users;
         // append current users receieved from server
         for (var i = 0; i < users.length; i++) {
-            console.log(users[i]);
             $('#currentUsers').append($('<li>').addClass('list-group-item').text(users[i].name).attr('socketid', users[i].id));
         }
         // set input placeholder to current username (inside name change modal)
@@ -92,7 +91,6 @@ $(()=>{
     });
 
     socket.on('changeName', (fromSID, toName)=>{
-        console.log('socketon changename' + fromSID + toName);
         for (var i = 0; i < currentUsers.length; i++){
             if (currentUsers[i].id == fromSID){
                 currentUsers[i].name = toName;
